@@ -1,152 +1,66 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>MERNa Web</title>
-	<style>
-		#urlInput {
-            width: 500px; 
-            padding: 10px;
-            font-size: 14px;
-        }
-        #favoritePlacesJSON, #batmanJSON {
-            padding: 20px;
-            background-color: lightgray;
-            margin-top: 20px;
-        }
-		#testingDiv {
-            display: none;
-        }
-    </style>
-</head>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="index.css" />
+		<script defer src="index.js"></script>
+		<title>Web Dice Roll: Pigs Game</title>
+	</head>
+
 <body>
-	<h1>MERNa Web Application</h1>
-	<p>This is an HTML, CSS, and JavaScript MERNa web client. To test your MERNa server, enter your 
-	MERNa sever URL below and press test connection button.</p>
 
-	<label for="urlInput">MERNa Server URL:</label><br />
-	<input type="text" id="urlInput" placeholder="Enter the URL of your remote MERNa server here..."><br /><br />
+    <main class="pig game">
+        <h1>Pig Lite Dice Roller</h1>
+        <h2>Instructions: <br>
+        <br> Roll the die to play Pig Lite. If you roll a 1, your turn is over and its player 2 turn. <br>
+        If you roll a 2-6, you can keep going!<br>
+        The first player to get to 100 points wins!
 
-	<button onclick="testMERNaServerConnection()">Test MERNa Server Connection</button>
-	<div id="ping"></div><br /><br />
+        <h2>How the Point System Works: <br>
+        <br> The players points will continue to total up everytime a player rolls a number from 2-6. <br>
+        Players can press the Hold button to save the points they have accumulayed during their current turn. 
+        Once the player presse Hold, those points are added to their total or preserved points, andd it becomes the other players turn. <br>
 
-	<script>
-		async function testMERNaServerConnection() {
-			const pingField = document.getElementById("ping");
-			pingField.innerHTML = "";
-			var div = document.getElementById('testingDiv');
-			div.style.display = 'none';
+        If the player rolls a 1, their current turn is over and it becomes the other players 2 turn. <br>
+        Rolling a 1 does not reset the player preserved or total points. However, any points accumulated during the players
+        current turn before rolling 1 will be reset to 0.
+        </h2>
 
-			const url = document.getElementById("urlInput").value + "/api/ping";
-			const response = await fetch(url);
-			const pingResponse = await response.text();
+    
+        <div class ="dice-button">
+            <button id= "rollButton" autofocus>Roll Dice</button>
+        </div>
 
-			if (pingResponse === 'ping response') {
-				pingField.innerHTML = "Success!";
-				var div = document.getElementById('testingDiv');
-				div.style.display = 'block';
-			} 
-		}
-	</script>
+        <div class="hold-button">
+            <button id="holdButton" autofocus>Hold Button</button>
+        </div>
 
-	<div id="testingDiv">
-		<button type="button" onclick="fetchAbout()">Fetch About</button>
-		<div id="fetch-about-result"></div>
-		<br><br>
 
-		<button type="button" onclick="fetch2Plus2()">Fetch 2plus2</button>
-		<div id="fetch-2plus2-result"></div>
-		<br><br>
+        <div class="dice-result">   
+            <label for="diceResult">Dice Result:</label>
+            <input type="text" id="diceResult" readonly>
 
-		Add two integers on the Node.js server.<br />
-		<select onchange="addTwoIntegers()" id="x-value">
-			<option>1</option>
-			<option>2</option>
-			<option>3</option>
-			<option>100</option>
-		</select> +
+            <p id="diceMessage"></p>
 
-		<select onchange="addTwoIntegers()" id="y-value">
-			<option>1</option>
-			<option>2</option>
-			<option>3</option>
-			<option>100</option>
-		</select> = 
-		<input id="sum" disabled></input><br /><br /><br />
+       
+        <div class="dice-points">
+            <label for="dicePoints">Total Dice Points:</label>
+            <input type="text" id="dicePoints" readonly>
 
-		<button type="button" onclick="calculateBMI()">Calculate BMI</button>
-		<div id="bmi-result"></div>
-		<br><br>
+            <p id="diceMessage"></p>
+        </div>
 
-		<script>
-			let fetchAboutCounter = 0
-			async function fetchAbout() {
-				fetchAboutCounter++
-				const url = document.getElementById("urlInput").value + "/about";
-				const response = await fetch(url)
-				const responseText = await response.text()
-				document.getElementById("fetch-about-result").innerHTML = responseText + " ("+fetchAboutCounter+")"
-			}
+        <div class="player-1">
+            <label for="playerOne">Player 1 Total:</label>
+            <input type="text" id="playerOnePoints" values="0" readonly>
+        </div>
 
-			let fetch2plus2Counter = 0
-			async function fetch2Plus2() {
-				fetch2plus2Counter++
-				const url = document.getElementById("urlInput").value + "/2plus2";
-				const response = await fetch(url)
-				const responseText = await response.text()
-				document.getElementById("fetch-2plus2-result").innerHTML = responseText + " ("+fetch2plus2Counter+")"
-			}
+        <div class="player-2">
+            <label for="playerTwo">Player 2 Total:</label>
+            <input type="text" id="playerTwoPoints" values="0" readonly>
+        </div>
 
-			async function addTwoIntegers() {
-				const x = document.getElementById("x-value").value
-				const y = document.getElementById("y-value").value
+    </main>
 
-				// Note the URL (fetch) string will look something like '/add-two-integers?x=2&y=1' when it is sent.
-				const url = document.getElementById("urlInput").value
-				const fetchString = url+"/add-two-integers?x="+x+"&y="+y
-				const response = await fetch(fetchString)
-				const responseText = await response.text()
-				document.getElementById("sum").value = responseText
-			}
-
-			async function calculateBMI() {
-				// Approximate height and weight for a man in the US. 
-				const url = document.getElementById("urlInput").value;
-				const fetchString = url+'/calculate-bmi?feet=5&inches=10&lbs=186';
-				const response = await fetch(fetchString)
-				const responseText = await response.text()
-				console.log(responseText)
-				document.getElementById("bmi-result").innerHTML = responseText
-			}
-		</script>
-
-		<button onclick="fetchBatman()">Batman</button>
-		<div id="batmanJSON">Batman JSON</div><br /><br />
-		<script>
-			async function fetchBatman() {
-				const url = document.getElementById("urlInput").value + "/batman";
-				const response = await fetch(url);
-				const batmanResponse = await response.json();
-
-				const batmanJSONField = document.getElementById("batmanJSON");
-				const batmanResponseText = "<pre>"+JSON.stringify(batmanResponse, null, 4)+"</pre"
-				batmanJSONField.innerHTML = batmanResponseText
-			}
-		</script>
-
-		<button onclick="testFavoritePlaces()">Favorite Places</button>
-		<div id="favoritePlacesJSON">Favorite Places JSON</div><br /><br />
-		<script>
-			async function testFavoritePlaces() {
-				const url = document.getElementById("urlInput").value + "/api/favorite-places";
-				const response = await fetch(url);
-				const places = await response.json();
-
-				const favoritePlacesJSONField = document.getElementById("favoritePlacesJSON");
-				const favoritePlacesText = "<pre>"+JSON.stringify(places, null, 4)+"</pre"
-				favoritePlacesJSONField.innerHTML = favoritePlacesText
-			}
-		</script>
-	</div>
 </body>
-</html>
+
