@@ -14,7 +14,7 @@ async function wakeUpServer() {
 
     // Ask the Node.js server to wake up
     const response =
-        await fetch("http://localhost:3000/api/wakeup");
+        await fetch("https://dice-roller-node-asl-e4f0c6dyc5aheae2.centralus-01.azurewebsites.net/api/wakeup");
 
     // Get the response from the server
     const data =
@@ -35,7 +35,7 @@ async function rollDice() {
 
     // Ask the Node.js server to roll a six-sided die
     const response =
-        await fetch("http://localhost:3000/api/roll/6");
+        await fetch("https://dice-roller-node-asl-e4f0c6dyc5aheae2.centralus-01.azurewebsites.net/api/roll/6");
 
     // Get the JSON response from the server
     const data =
