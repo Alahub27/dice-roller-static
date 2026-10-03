@@ -3,7 +3,7 @@
 ### Class: Software Engineering
 
 ### Credits
-ChatGPT, W3Schools was used as assistant for my HTML/CSS coding
+ChatGPT, W3Schools was used for the HTML, CSS, and JSS coding
 Eric Pogue for the MERNA static website template repository.
 
 
